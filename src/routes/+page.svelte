@@ -162,7 +162,7 @@
 <style>
 	@font-face {
 		font-family: 'Roboto';
-		src: url('Roboto/Black.ttf') format('truetype');
+		src: url('$lib/assets/Roboto/Black.ttf') format('truetype');
 	}
 	:root {
 		background-color: black;
