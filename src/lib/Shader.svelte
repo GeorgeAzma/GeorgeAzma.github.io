@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { afterUpdate } from 'svelte';
 
 	export let frag: string = '';
 
@@ -8,13 +8,10 @@
 	let gl: WebGL2RenderingContext | null;
 	let start = performance.now();
 
-	onMount(() => {
+	afterUpdate(() => {
 		if (!frag) {
-			console.error('No fragment shader provided');
-			return;
+			frag = 'precision mediump float;void main() {gl_FragColor=vec4(1);}';
 		}
-
-		start = performance.now();
 
 		gl = canvas.getContext('webgl2');
 		if (!gl) {
@@ -86,6 +83,7 @@
 		resizeCanvas();
 		window.addEventListener('resize', resizeCanvas);
 
+		start = performance.now();
 		render();
 
 		return () => {
