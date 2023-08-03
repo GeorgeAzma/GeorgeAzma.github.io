@@ -20,7 +20,7 @@
 	I'm George Azmaipharashvili, Software engineer mainly specialized at graphics.
 </div>
 
-<div id="contact-info">Contact: geo.azmai@gmail.com</div>
+<div id="contact-info">lumi.main.mail@gmail.com</div>
 <div id="bottom-text">© 2023-2025 George Azmaipharashvili. All rights reserved.</div>
 
 <style>
@@ -56,7 +56,18 @@
 		font-size: small;
 		position: absolute;
 		bottom: 0;
-		padding: 4px;
+		padding-inline: 4px;
+		line-height: 1.5rem;
 		color: #ddddff66;
+		user-select: all;
+		-webkit-user-select: all;
+	}
+	::-moz-selection {
+		color: #aaa;
+		background: #ffffff22;
+	}
+	::selection {
+		color: #aaa;
+		background: #ffffff22;
 	}
 </style>
