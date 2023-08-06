@@ -44,7 +44,7 @@ float noise(vec3 p)
     d = d * d * (3.0 - 2.0 * d);
     vec4 b = a.xxyy + vec4(0.0, 1.0, 0.0, 1.0);
     vec4 c = perm(perm(b.xyxy).xyxy + b.zzww) + a.zzzz;
-    vec4 o3 = frac(perm(c + 1.0) * (1.0 / 41.0)) * d.z + frac(perm(c) * (1.0 / 41.0)) * (1.0 - d.z);
+    vec4 o3 = fract(perm(c + 1.0) * (1.0 / 41.0)) * d.z + fract(perm(c) * (1.0 / 41.0)) * (1.0 - d.z);
     vec2 o4 = o3.yw * d.x + o3.xz * (1.0 - d.x);
     return o4.y * d.y + o4.x * (1.0 - d.y);
 }
