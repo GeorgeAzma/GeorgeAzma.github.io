@@ -61,7 +61,7 @@ float fbm(vec3 p)
 
 float SDF(vec3 point, float noise)
 {
-    return (dot(point, point) - 0.16 - noise) * 0.7;
+    return (dot(point, point) - noise - 0.16) * 0.7;
 }
 
 Hit raymarch(Ray ray, float noise)
