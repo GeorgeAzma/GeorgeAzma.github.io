@@ -1,11 +1,11 @@
-precision mediump float;
+precision lowp float;
 
 uniform float time;
 uniform vec2 resolution;
 
 #define MAX_RAY_MARCH_STEPS 32
 #define MAX_DISTANCE 1.0
-#define SURFACE_DISTANCE 0.003
+#define SURFACE_DISTANCE 0.01
 #define SPEED 0.3
 
 #define HALF_PI 1.57079632679

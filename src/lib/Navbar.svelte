@@ -75,6 +75,7 @@
 	@media only screen and (max-width: 500px) {
 		#navbar a {
 			font-size: 0px;
+			padding-inline: 0px;
 		}
 	}
 </style>
