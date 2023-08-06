@@ -66,30 +66,28 @@ float SDF(vec3 point, float noise)
 
 Hit raymarch(Ray ray, float noise)
 {
-    vec3 point;
-    float dist = 0.0;
-    float min_dist = MAX_DISTANCE;
+    Hit hit;
+    hit.min_dist = MAX_DISTANCE;
+    hit.normal = vec3(0);
+    hit.point = vec3(0);
+    hit.dist = 0.0;
     for (int i = 0; i < MAX_RAY_MARCH_STEPS; ++i)
     {
-        point = ray.pos + ray.dir * dist; 
-        float sdf = SDF(point, noise);
-        min_dist = min(min_dist, sdf);
-        dist += sdf;
-        if (dist >= MAX_DISTANCE)
-            return Hit(MAX_DISTANCE, min_dist, point, vec3(0));
+        hit.point = ray.pos + ray.dir * hit.dist; 
+        float sdf = SDF(hit.point, noise);
+        hit.min_dist = min(hit.min_dist, sdf);
+        hit.dist += sdf;
+        if (hit.dist >= MAX_DISTANCE)
+            return hit;
         if (abs(sdf) <= SURFACE_DISTANCE)
         {
             vec2 e = vec2(0.002, 0.0);
-            Hit hit;
-            hit.normal = normalize(sdf - vec3(SDF(point - e.xyy, noise), SDF(point - e.yxy, noise), SDF(point - e.yyx, noise)));
-            hit.dist = dist;
-            hit.min_dist = min_dist;
-            hit.point = point;
+            hit.normal = normalize(sdf - vec3(SDF(hit.point - e.xyy, noise), SDF(hit.point - e.yxy, noise), SDF(hit.point - e.yyx, noise)));
             return hit;
         }
     }
     
-    return Hit(dist, min_dist, point, vec3(0));
+    return hit;
 }
 
 vec4 getColor(Ray ray, vec3 color, float n)
@@ -105,7 +103,7 @@ vec4 getColor(Ray ray, vec3 color, float n)
     else
     {
         col = vec3(pow(max(0.0, 1.0 - hit.min_dist), 16.0)) * color;
-        hit.dist = MAX_DISTANCE + 1.0 - max(0.0, 1.0 - hit.min_dist);
+        float b = dot(col, col);
     }
     return vec4(col, hit.dist);
 }
@@ -122,7 +120,7 @@ void main()
     float n1 = fbm(vec3(uv, time * SPEED));
     float n2 = fbm(vec3(uv, -time * SPEED));
     
-    vec4 c0 = getColor(camera.ray, vec3(1, 0.3, 1), n1);
+    vec4 c0 = getColor(camera.ray, vec3(1, 0.15, 1), n1);
     vec4 c1 = getColor(camera.ray, vec3(0.1, 0.5, 1.0), n2);
     
     if (c0.w > c1.w) { vec4 temp = c0; c0 = c1; c1 = temp; }

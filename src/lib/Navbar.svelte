@@ -36,9 +36,10 @@
 		text-shadow: -1px 2px 4px black;
 	}
 	#navbar a {
+		font-family: 'Roboto Medium';
 		display: flex;
 		height: calc(3vh + 8px);
-		font-size: calc(2vh + 8px);
+		font-size: calc(1.5vh + 8px);
 		flex-grow: 1;
 		gap: 8px;
 		margin-inline: 3px;
@@ -49,25 +50,23 @@
 		text-decoration: none;
 		padding: calc(4px + 1vh);
 		-webkit-user-drag: none;
-		box-shadow: inset 0px 0px 48px #ddeeff55, inset 0px 0px 6px #ddeeff55;
+		box-shadow: inset 0px 0px 32px #ddeeff55, inset 0px 0px 4px #ddeeff55;
 		border-radius: calc(1vh + 4px);
 	}
 	#navbar a:last-child {
 		border-right: none;
 	}
 	#navbar a:hover {
-		padding-inline: 1.5rem;
-		background-color: #ddeeff55;
-		background-clip: padding-box;
+		padding-inline: 1.4rem;
+		background-color: #dddfff22;
 		transition: 200ms;
-		box-shadow: inset 0px 0px 8px #ddeeff55;
 		text-shadow: 0px 0px 12px #ddeeff;
 	}
 	#navbar a:active {
 		padding-inline: 1.6rem;
-		background-color: #ddeeff30;
+		background-color: #dddfff30;
 		transition: 150ms;
-		box-shadow: inset 0px 0px 8px #ddeeffff;
+		box-shadow: inset 0px 0px 12px #ddeeffaa;
 	}
 	.nav-icon {
 		height: 100%;

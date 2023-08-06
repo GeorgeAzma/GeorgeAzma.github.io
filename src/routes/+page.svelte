@@ -28,8 +28,12 @@
 
 <style>
 	@font-face {
-		font-family: 'Roboto Black';
+		font-family: 'Roboto Bold';
 		src: url('$lib/assets/fonts/Roboto/Bold.ttf') format('truetype');
+	}
+	@font-face {
+		font-family: 'Roboto Medium';
+		src: url('$lib/assets/fonts/Roboto/Medium.ttf') format('truetype');
 	}
 	.main-text {
 		position: absolute;
@@ -38,14 +42,11 @@
 		translate: -50% -50%;
 		color: white;
 		inline-size: 80%;
-		justify-content: space-between;
-		font-size: 8vmin;
-		font-weight: 800;
+		font-size: 6vmin;
+		font-weight: 700;
 		text-align: center;
 		padding-inline: 10%;
-		filter: drop-shadow(0px 0px 4px #334466);
-		overflow: auto;
-		overflow-wrap: break-word;
+		filter: drop-shadow(0px 0px 4px #334455);
 		background: linear-gradient(0.25turn, #3f67ff, #eff1ff, #ff99fc);
 		background-clip: text;
 		-webkit-background-clip: text;
