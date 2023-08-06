@@ -3,7 +3,7 @@
 		<img class="nav-icon" src="shadertoy.png" alt="Shadertoy Icon" />
 		Shaders</a
 	>
-	<a href="https://fiverr.com/lumiey?public_mode=true" target="_blank"
+	<a href="https://fiverr.com/lumiey" target="_blank"
 		><svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"
 			><circle cx="200" cy="200" fill="#00b22d" r="200" /><g fill="#fff"
 				><path
@@ -37,19 +37,20 @@
 	}
 	#navbar a {
 		display: flex;
-		height: 32px;
+		height: calc(3vh + 8px);
+		font-size: calc(2vh + 8px);
 		flex-grow: 1;
 		gap: 8px;
-		margin-inline: 4px;
+		margin-inline: 3px;
 		align-items: center;
 		justify-content: center;
 		transition: 200ms;
 		color: #ffffff;
 		text-decoration: none;
-		padding: 16px;
+		padding: calc(4px + 1vh);
 		-webkit-user-drag: none;
 		box-shadow: inset 0px 0px 48px #ddeeff55, inset 0px 0px 6px #ddeeff55;
-		border-radius: 16px;
+		border-radius: calc(1vh + 4px);
 	}
 	#navbar a:last-child {
 		border-right: none;
@@ -70,5 +71,10 @@
 	}
 	.nav-icon {
 		height: 100%;
+	}
+	@media only screen and (max-width: 500px) {
+		#navbar a {
+			font-size: 0px;
+		}
 	}
 </style>
