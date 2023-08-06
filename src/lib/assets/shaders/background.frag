@@ -56,12 +56,12 @@ float noise(vec3 p)
 }
 float fbm(vec3 p)
 {
-    return (noise(p * 1.4) + noise(p * 2.25 + 16.791) * 0.6 + noise(p * 3.375 - 31.613) * .35) * 0.6;
+    return noise(p * 1.4) * .15 + noise(p * 2.25 + 46.791) * .06 + noise(p * 3.375 - 31.613) * .035;
 }
 
 float SDF(vec3 point, float noise)
 {
-    return (dot(point, point) - 0.16 - noise * 0.25) * 0.7;
+    return (dot(point, point) - 0.16 - noise) * 0.7;
 }
 
 Hit raymarch(Ray ray, float noise)
