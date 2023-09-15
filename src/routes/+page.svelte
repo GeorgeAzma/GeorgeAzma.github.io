@@ -19,7 +19,7 @@
 <Shader frag={background} />
 <Navbar />
 <div class="main-text">
-	I'm George Azmaipharashvili, Software engineer mainly specialized at graphics.
+	George Azmaipharashvili, Software engineer mainly specialized at graphics.
 </div>
 
 <button id="contact-info" on:click={copyToClipboard}
