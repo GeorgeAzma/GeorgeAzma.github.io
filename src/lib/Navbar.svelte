@@ -3,6 +3,10 @@
 		<img class="nav-icon" src="shadertoy.png" alt="Shadertoy Icon" />
 		Shaders</a
 	>
+	<a href="https://www.linkedin.com/in/george-azmaipharashvili-ab8b7b286/" target="_blank">
+		<img class="nav-icon" src="linkedin.png" alt="LinkedIn Icon" />
+		LinkedIn</a
+	>
 	<a href="https://fiverr.com/lumiey" target="_blank"
 		><svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"
 			><circle cx="200" cy="200" fill="#00b22d" r="200" /><g fill="#fff"
