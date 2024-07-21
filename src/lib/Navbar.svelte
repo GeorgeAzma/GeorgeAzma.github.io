@@ -1,14 +1,19 @@
 <nav id="navbar">
 	<a href="https://shadertoy.com/user/Peace" target="_blank">
-		<img class="nav-icon" src="shadertoy.png" alt="Shadertoy Icon" />
+		<img class="nav-icon" src="shadertoy.webp" alt="Shadertoy Icon" width="38" height="38" />
 		Shaders</a
 	>
 	<a href="https://www.linkedin.com/in/george-azmaipharashvili-ab8b7b286/" target="_blank">
-		<img class="nav-icon" src="linkedin.png" alt="LinkedIn Icon" />
+		<svg class="nav-icon" width="38" height="38" viewBox="0 0 128 128" id="linkedin"
+			><circle cx="64" cy="64" r="64" fill="#0a66c2" /><path
+				fill="#fff"
+				d="M92 32H36a4 4 0 0 0-4 4v56a4 4 0 0 0 4 4h56a4 4 0 0 0 4-4V36a4 4 0 0 0-4-4ZM52 86H42V56h10Zm-5-34a6 6 0 1 1 6-6 6 6 0 0 1-6 6Zm39 34H76V66c0-1.66-2.24-3-5-3-4 0-5 5.34-5 7v16H56V56h10v7c0-5 4.48-7 10-7a10 10 0 0 1 10 10Z"
+			/></svg
+		>
 		LinkedIn</a
 	>
 	<a href="https://fiverr.com/lumiey" target="_blank"
-		><svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"
+		><svg class="nav-icon" width="38" height="38" viewBox="0 0 400 400"
 			><circle cx="200" cy="200" fill="#00b22d" r="200" /><g fill="#fff"
 				><path
 					d="M364.4 162.7c0-6.6-5.2-12-11.8-12-6.4 0-11.7 5.3-11.7 12 0 6.6 5.2 12 11.7 12 6.6.1 11.8-5.3 11.8-12zm-11.8 8.7c-4.5 0-8-3.8-8-8.7 0-4.8 3.5-8.6 8-8.6 4.6 0 8.2 3.8 8.2 8.6 0 4.9-3.6 8.7-8.2 8.7z"
@@ -21,7 +26,7 @@
 		>Fiverr</a
 	>
 	<a href="https://github.com/GeorgeAzma" target="_blank">
-		<svg class="nav-icon" viewBox="0 0 98 96" xmlns="http://www.w3.org/2000/svg"
+		<svg class="nav-icon" viewBox="0 0 98 96" width="38" height="38"
 			><path
 				fill-rule="evenodd"
 				clip-rule="evenodd"
