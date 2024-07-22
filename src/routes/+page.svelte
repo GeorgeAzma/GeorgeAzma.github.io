@@ -30,22 +30,23 @@
 			scroll =
 				scroll - r > 0 ? r + window.innerWidth : scroll - r < 0 ? r - window.innerWidth : scroll;
 			shadersContainer.scrollTo({ left: scroll, behavior: 'smooth' });
-		}, 400);
+		}, 300);
 	};
 
 	function scrollLeft() {
 		if (shadersContainer !== null) {
-			scroll = Math.max(0, Math.round(scroll / window.innerWidth) - 1) * window.innerWidth;
+			scroll = (Math.round(scroll / window.innerWidth) - 1) * window.innerWidth;
+			if (scroll < 0)
+				scroll = shadersContainer.scrollWidth - window.innerWidth;
 			shadersContainer.scrollTo({ left: scroll, behavior: 'smooth' });
 		}
 	}
 
 	function scrollRight() {
 		if (shadersContainer !== null) {
-			scroll = Math.min(
-				shadersContainer.scrollWidth - window.innerWidth,
-				(Math.round(scroll / window.innerWidth) + 1) * window.innerWidth
-			);
+			scroll = (Math.round(scroll / window.innerWidth) + 1) * window.innerWidth;
+			if (scroll > shadersContainer.scrollWidth - window.innerWidth)
+				scroll = 0;
 			shadersContainer.scrollTo({ left: scroll, behavior: 'smooth' });
 		}
 	}
@@ -61,10 +62,18 @@
 				scrollLeft();
 				break;
 			case 'ArrowRight':
+			case ' ':
 				scrollRight();
 				break;
 		}
 	};
+
+	const handleWheel = (event: WheelEvent) => {
+		if (event.deltaY > 0) scrollLeft();
+		else scrollRight();
+	}
+
+	// Scroll using mousewheel
 
 	let oldWidth = 0;
 	const handleResize = () => {
@@ -73,12 +82,35 @@
 		oldWidth = window.innerWidth;
 	};
 
+	let mx = 0;
+	let my = 0;
+	const handleMouseDown = (event: MouseEvent) => {
+		if (event.button === 0) {
+			mx = event.clientX;
+			my = event.clientY;
+		}
+	};
+
+	const handleMouseUp = (event: MouseEvent) => {
+		if (event.button === 0) {
+			const dx = event.clientX - mx;
+			const dy = event.clientY - my;
+			if (Math.abs(dx) > Math.abs(dy)) {
+				if (dx > 0) scrollLeft();
+				else scrollRight();
+			}
+		}
+	};
+
 	onMount(() => {
 		if (shadersContainer) shadersContainer.addEventListener('scroll', handleScroll);
 		if (window) {
 			oldWidth = window.innerWidth;
 			window.addEventListener('keyup', handleKeyPress);
 			window.addEventListener('resize', handleResize);
+			window.addEventListener('wheel', handleWheel);
+			window.addEventListener('mousedown', handleMouseDown);
+			window.addEventListener('mouseup', handleMouseUp);
 		}
 	});
 
@@ -87,6 +119,9 @@
 		if (typeof window !== 'undefined') {
 			window.removeEventListener('keyup', handleKeyPress);
 			window.removeEventListener('resize', handleResize);
+			window.removeEventListener('wheel', handleWheel);
+			window.removeEventListener('mousedown', handleMouseDown);
+			window.removeEventListener('mouseup', handleMouseUp);
 		}
 	});
 </script>
@@ -100,10 +135,10 @@
 	</div>
 	<h1 class="main-text">I'm Lumiey, graphics developer and software engineer.</h1>
 
-	<button id="contact-info" on:click={copyToClipboard}
+	<button id="contact-info" aria-label="Contact me" on:click={copyToClipboard}
 		>{email}<span class="hidden">(Copied)</span></button
 	>
-	<button class="arrow-left" on:click={scrollLeft}>
+	<button class="arrow-left" aria-label="Scroll left" on:click={scrollLeft}>
 		<svg viewBox="-4.5 0 20 20" stroke="#ffffffcc" stroke-width="0.6" fill="#ffffffaa">
 			<path
 				transform="translate(-331.000000, -6519.000000)"
@@ -111,7 +146,7 @@
 			/>
 		</svg></button
 	>
-	<button class="arrow-right" on:click={scrollRight}
+	<button class="arrow-right" aria-label="Scroll right" on:click={scrollRight}
 		><svg viewBox="-4.5 0 20 20" stroke="#ffffffcc" stroke-width="0.6" fill="#ffffffaa">
 			<path
 				transform="scale(-1, 1) translate(-341.000000, -6519.000000)"
@@ -135,11 +170,11 @@
 		translate: 0% -50%;
 		padding-block: 12rem;
 		border-radius: 1rem;
-		opacity: 0.5;
+		opacity: 0.4;
 	}
 	.arrow-left:hover,
 	.arrow-right:hover {
-		opacity: 1;
+		opacity: 0.8;
 		box-shadow: inset 0px 0px 32px #ddeeff44, inset 0px 0px 4px #ddeeff44;
 	}
 

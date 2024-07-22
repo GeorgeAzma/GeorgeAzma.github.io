@@ -68,9 +68,6 @@
 		box-shadow: inset 0px 0px 32px #ddeeff66, inset 0px 0px 4px #ddeeff66;
 		border-radius: calc(1vh + 4px);
 	}
-	#navbar a:last-child {
-		border-right: none;
-	}
 	#navbar a:hover {
 		padding-inline: 1.4rem;
 		background-color: #dddfff22;
@@ -84,7 +81,8 @@
 		box-shadow: inset 0px 0px 12px #ddeeffaa;
 	}
 	.nav-icon {
-		height: 100%;
+		width: 38px;
+		height: 38px;
 	}
 	@media only screen and (max-width: 640px) {
 		#navbar a {
