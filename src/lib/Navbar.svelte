@@ -43,7 +43,7 @@
 	#navbar {
 		display: flex;
 		text-shadow: -1px 2px 4px black;
-		margin: 4px;
+		margin: 5px;
 		padding: calc(4px + 1vh);
 		box-shadow: inset 0px 0px 32px #ddeeff66, inset 0px 0px 4px #ddeeff66;
 		border-radius: calc(1vh + 4px);

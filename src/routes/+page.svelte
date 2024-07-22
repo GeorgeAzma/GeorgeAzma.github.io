@@ -98,9 +98,7 @@
 		<Shader frag={carbonFiber} />
 		<Shader frag={lavaLamp} />
 	</div>
-	<div class="main-text">
-		George Azmaipharashvili, Software engineer mainly specialized at graphics.
-	</div>
+	<h1 class="main-text">I'm Lumiey, graphics developer and software engineer.</h1>
 
 	<button id="contact-info" on:click={copyToClipboard}
 		>{email}<span class="hidden">(Copied)</span></button
@@ -129,6 +127,7 @@
 		position: absolute;
 		border: none;
 		background: none;
+		outline: none;
 		top: 50%;
 		transition: 300ms;
 		width: 4rem;
@@ -204,9 +203,10 @@
 		position: absolute;
 		top: 50%;
 		left: 50%;
+		margin-block: 0;
 		translate: -50% -50%;
 		color: white;
-		inline-size: 80%;
+		inline-size: 75%;
 		font-size: 5vmin;
 		font-weight: 700;
 		text-align: center;
