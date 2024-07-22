@@ -38,8 +38,7 @@
 	function scrollLeft() {
 		if (shadersContainer !== null) {
 			scroll = (Math.round(scroll / window.innerWidth) - 1) * window.innerWidth;
-			if (scroll < 0)
-				scroll = shadersContainer.scrollWidth - window.innerWidth;
+			if (scroll < 0) scroll = shadersContainer.scrollWidth - window.innerWidth;
 			shadersContainer.scrollTo({ left: scroll, behavior: 'smooth' });
 		}
 	}
@@ -47,8 +46,7 @@
 	function scrollRight() {
 		if (shadersContainer !== null) {
 			scroll = (Math.round(scroll / window.innerWidth) + 1) * window.innerWidth;
-			if (scroll > shadersContainer.scrollWidth - window.innerWidth)
-				scroll = 0;
+			if (scroll > shadersContainer.scrollWidth - window.innerWidth) scroll = 0;
 			shadersContainer.scrollTo({ left: scroll, behavior: 'smooth' });
 		}
 	}
@@ -73,7 +71,7 @@
 	const handleWheel = (event: WheelEvent) => {
 		if (event.deltaY > 0) scrollLeft();
 		else scrollRight();
-	}
+	};
 
 	// Scroll using mousewheel
 
@@ -128,6 +126,7 @@
 	});
 </script>
 
+<div class="loader" />
 <div id="gradient" class="glass-pane">
 	<Navbar />
 	<div bind:this={shadersContainer} id="shaders">
@@ -161,6 +160,24 @@
 </div>
 
 <style>
+	.loader {
+		position: absolute;
+		translate: calc(50vw - 50%) calc(70vh - 50%);
+		width: 80px;
+		height: 80px;
+		border-radius: 50%;
+		z-index: -10;
+		background: radial-gradient(farthest-side, #0f314d 94%, #0000) top/16px 16px no-repeat,
+			conic-gradient(#0000 30%, #0f314d);
+		mask: radial-gradient(farthest-side, #0000 calc(100% - 16px), #000 0);
+		-webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 16px), #000 0);
+		animation: l13 400ms infinite linear;
+	}
+	@keyframes l13 {
+		100% {
+			transform: rotate(1turn);
+		}
+	}
 	.arrow-left,
 	.arrow-right {
 		position: absolute;

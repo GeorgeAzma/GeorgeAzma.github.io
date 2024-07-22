@@ -14,14 +14,10 @@
 	let vertexBuffer: WebGLBuffer | null = null;
 	let compiled = false;
 
+	// Only compiles/renders if visible or next to visible
 	function isCanvasVisible() {
 		const rect = canvas.getBoundingClientRect();
-		return (
-			rect.top  >= 0 &&
-			rect.left >= 0 &&
-			rect.bottom <= window.innerHeight &&
-			rect.right <= window.innerWidth
-		);
+		return rect.left >= -window.innerWidth && rect.right <= window.innerWidth * 2;
 	}
 
 	function resizeCanvas() {
@@ -99,9 +95,12 @@
 			if (vertexBuffer === null) {
 				vertexBuffer = gl.createBuffer();
 				gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-				gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-			}
-			else gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+				gl.bufferData(
+					gl.ARRAY_BUFFER,
+					new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
+					gl.STATIC_DRAW
+				);
+			} else gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
 
 			gl.useProgram(program);
 			const positionAttribute = gl.getAttribLocation(program, 'a_position');
@@ -109,6 +108,7 @@
 			gl.vertexAttribPointer(positionAttribute, 2, gl.FLOAT, false, 0, 0);
 
 			compiled = true;
+			console.log('Compiled!');
 		}
 
 		resizeCanvas();
@@ -120,7 +120,7 @@
 		if (!(canvas && gl)) return;
 
 		let now = performance.now();
-		if(!isCanvasVisible()) {
+		if (!isCanvasVisible()) {
 			requestAnimationFrame(render);
 			const dt = now - last;
 			start += dt;
@@ -131,6 +131,8 @@
 		if (!compiled) {
 			onShaderChange(vert, frag);
 		}
+
+		if (!program) return;
 
 		gl.clearColor(0, 0, 0, 1);
 		gl.clear(gl.COLOR_BUFFER_BIT);
