@@ -5,6 +5,7 @@
 	import glossyGradients from '$lib/assets/shaders/glossy-gradients.frag?raw';
 	import carbonFiber from '$lib/assets/shaders/carbon-fiber.frag?raw';
 	import lavaLamp from '$lib/assets/shaders/lava-lamp.frag?raw';
+	import siri from '$lib/assets/shaders/siri.frag?raw';
 
 	const email = 'lumi.main.mail@gmail.com';
 	const copyToClipboard = (e: Event & { currentTarget: HTMLElement }) => {
@@ -132,6 +133,7 @@
 		<Shader frag={glossyGradients} />
 		<Shader frag={carbonFiber} />
 		<Shader frag={lavaLamp} />
+		<Shader frag={siri} />
 	</div>
 	<h1 class="main-text">I'm Lumiey, graphics developer and software engineer.</h1>
 
@@ -226,7 +228,7 @@
 		top: 0;
 		position: absolute;
 		border-radius: 0px;
-		background: linear-gradient(0.5turn, #00000000, #000000aa);
+		background: linear-gradient(0.5turn, #00005544, #00000000, #00000000, #21112599);
 	}
 	.glass-pane {
 		margin: 4px;
