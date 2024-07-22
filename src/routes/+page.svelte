@@ -59,9 +59,11 @@
 	const handleKeyPress = (event: KeyboardEvent) => {
 		switch (event.key) {
 			case 'ArrowLeft':
+			case 'a':
 				scrollLeft();
 				break;
 			case 'ArrowRight':
+			case 'd':
 			case ' ':
 				scrollRight();
 				break;

@@ -12,7 +12,6 @@
 	let start = performance.now();
 	let last = performance.now();
 	let vertexBuffer: WebGLBuffer | null = null;
-	let compiled = false;
 
 	// Only compiles/renders if visible or next to visible
 	function isCanvasVisible() {
@@ -47,7 +46,6 @@
 	});
 
 	function onShaderChange(vert: string, frag: string) {
-		compiled = false;
 		if (!frag) frag = 'precision mediump float;void main() {gl_FragColor=vec4(1);}';
 		if (!vert) vert = 'attribute vec4 a_position;void main() {gl_Position = a_position;}';
 		if (!gl) return;
@@ -106,9 +104,6 @@
 			const positionAttribute = gl.getAttribLocation(program, 'a_position');
 			gl.enableVertexAttribArray(positionAttribute);
 			gl.vertexAttribPointer(positionAttribute, 2, gl.FLOAT, false, 0, 0);
-
-			compiled = true;
-			console.log('Compiled!');
 		}
 
 		resizeCanvas();
@@ -128,10 +123,7 @@
 			return;
 		}
 
-		if (!compiled) {
-			onShaderChange(vert, frag);
-		}
-
+		if (!program) onShaderChange(vert, frag);
 		if (!program) return;
 
 		gl.clearColor(0, 0, 0, 1);
