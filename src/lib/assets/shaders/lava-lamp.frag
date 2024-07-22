@@ -8,29 +8,23 @@ const vec3 BLOB_COL_BASE = vec3(1.0, 0.11, 0.8);
 const vec3 BLOB_COL_GLOW = vec3(1.0, 0.9, 0.0);
 const float ROWS = 6.0;
 
-float smin(float a, float b, float k)
-{
-    float h = max(k-abs(a-b), 0.0)/k;
-    return min(a, b) - h*h*k*(1.0/4.0);
+float smin(float a, float b, float k) {
+    float h = max(k - abs(a - b), 0.0);
+    return min(a, b) - h * h / k * 0.25;
 }
 
-float rand(int i, float lo, float hi) {
-    return (hi - lo) * 0.5 * (sin(float(997*i)) + 1.) + lo;
-}
+vec4 perm(vec4 x) { x *= x * 34.0 + 1.0; return x - floor(x / 289.0) * 289.0; }
 
-vec4 perm(vec4 x) { x = ((x * 34.0) + 1.0) * x; return x - floor(x * (1.0 / 289.0)) * 289.0; }
-
-float noise(vec3 p)
-{
+float noise(vec3 p) {
     vec3 a = floor(p);
     vec3 d = p - a;
     d = d * d * (3.0 - 2.0 * d);
 
-    vec4 b = a.xxyy + vec4(0.0, 1.0, 0.0, 1.0);
+    vec4 b = a.xxyy + vec4(0, 1, 0, 1);
     vec4 k1 = perm(b.xyxy);
     vec4 k2 = perm(k1.xyxy + b.zzww);
 
-    vec4 c = k2 + a.zzzz;
+    vec4 c = k2 + a.z;
     vec4 k3 = perm(c);
     vec4 k4 = perm(c + 1.0);
 
@@ -45,69 +39,61 @@ float noise(vec3 p)
 
 float rand1d(float n) { return fract(sin(n) * 43758.5453123); }
 
-float noise1d(float p) 
-{
+float noise1d(float p)  {
 	float fl = floor(p);
 	float fc = fract(p);
 	return mix(rand1d(fl), rand1d(fl + 1.0), fc);
 }
 
-float blob(vec2 uv, vec2 pos, float n, float radius, float period, int index) 
-{ 
-    float time = time * 0.3 + float(index) * 684.7291;
-    int i = int(time / period);
-    float t = mod(time, period) / period;
-    
-    pos.y = smoothstep(0., .4, t)*2.-1.;
-    pos.y = mix(pos.y, -1., smoothstep(.5, .8, t)) * (ROWS - 1.0);
-    
-    //pos.x = pos.x - (noise1d(time * .25 + float(index) * 363.7543)*2.-1.) * ROWS;
-    
-    vec2 p = uv - pos + n;
-    return length(p) - radius;
+float blob(vec2 uv, float n, float i) { 
+    float r = noise1d(i + time * 0.1) * 1.2 + 0.4 * max(resolution.x / resolution.y, resolution.y / resolution.x);    
+    float t = fract((time * 0.015 + i * 84.7291) / (1.0 + rand1d(i + ROWS)));
+    vec2 pos = vec2(i * max(1.0, resolution.x / resolution.y) * 0.8, 
+                   (smoothstep(0.0, 0.4, t) * smoothstep(0.8, 0.5, t) * 2.0 - 1.0) * (ROWS - 1.0) * resolution.y / min(resolution.x, resolution.y));
+    return length(uv - pos + n) - r;
 }
 
-float sdf(vec2 uv) 
-{
-    float d = 9999999.;
-    float n = noise(vec3(uv, time * .2) * 0.7) * 0.7;
-    for (float i = -ROWS; i <= ROWS; i += 1.0) 
-    {
-        float r = noise1d(i+time*0.2);
-        d = smin(d, blob(uv, vec2(i * resolution.x / resolution.y * 0.8, 0.0), n, (0.7 + r*2.) * 0.8, 8.0 + abs(rand1d(i)) * 8.0, int(i)), SMOOTHNESS);
+float sdf(vec2 uv, float n) {
+    float d = 9999.9;
+    for (float i = -ROWS; i <= ROWS; ++i) {
+        d = smin(d, blob(uv, n, i), SMOOTHNESS);
     }
     return d;
 }
 
 float specular(vec3 light_dir, vec3 normal) {
-    light_dir = normalize(light_dir);
-    vec3 view_dir = vec3(0,0,-1);
-    vec3 halfway = normalize(light_dir + view_dir);
-    float s = max(0.0, dot(normal, halfway));
-    return s * s * s * s * s * s;
+    vec3 halfway = normalize(light_dir + vec3(0, 0, -3));
+    float s = dot(normal, halfway);
+    s *= s * s;
+    return s * s;
 }
 
-vec3 getNormal(vec2 uv) {
-    vec2 e = vec2(8.0, 0);
-    float nx = (sdf(uv - e.xy) - sdf(uv + e.xy)) / (2.0 * e.x);
-    float ny = (sdf(uv - e.yx) - sdf(uv + e.yx)) / (2.0 * e.x);
-    vec3 n = normalize(vec3(nx, ny, -1.));
-    return n;
+vec3 getNormal(vec2 uv, float d, float n) {
+    vec2 e = vec2(12, 0);
+    float nx = d - sdf(uv + e.xy, n);
+    float ny = d - sdf(uv + e.yx, n);
+    return normalize(vec3(nx, ny, e.x * 2.0));
 }
 
 void main() {
     float min_res = min(resolution.x, resolution.y);
     vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / min_res * ROWS;
-    vec3 uvn = normalize(vec3(uv, 1.0));
     
-    float d = sdf(uv); 
-    vec3 n = getNormal(uv);
-    float m = smoothstep(0.0, 0.0 - (1.0 / resolution.y) * 2., d);
-    float s = noise(vec3(uv, time * .5 + 630.737551) * 1.0) * 0.5;
-    float spec = max(0.0, uvn.y) * specular(vec3(uvn.x,-3.,0.0), n);
-    spec += min(1.0, 1.-uvn.y) * specular(vec3(uvn.x,3.,0.0), n);
-    spec = spec / (spec + 1.0) * 1.5;
+    float n2 = noise(vec3((gl_FragCoord.xy * 2.0 - resolution.xy) / min_res * 5.0, time * 0.1) * 0.7) * 0.7;
+    float d = sdf(uv, n2); 
+    vec3 background = BLOB_COL_BASE * 1.0 / (5.0 + d);
+    if (d > 0.0) {
+        gl_FragColor = vec4(background, 1);
+        return;
+    }
+    vec3 n = getNormal(uv, d, n2);
+    float m = smoothstep(0.0, -16.0 / min_res, d);
+    vec3 uvn = normalize(vec3(uv, 3));
+    float spec = max(0.0, uvn.y) * specular(vec3(uvn.x, -3, 0), n);
+    spec += min(1.0, 1.0 - uvn.y) * specular(vec3(uvn.x, 3, 0), n);
+    spec /= (spec + 3.0) * 0.2;
+
     vec3 col = spec * spec * (BLOB_COL_GLOW * 0.3 + 0.7) + mix(BLOB_COL_BASE, BLOB_COL_GLOW, spec);
-    col -= max(0.0, 1.- pow(abs(-d), 0.25)) * 0.7;
-    gl_FragColor = vec4(col * m + BLOB_COL_BASE * (1.0 - m) / (6.0 + d), 1.0);
+    col -= max(0.0, 1.0 - sqrt(sqrt(-d))) * 0.7;
+    gl_FragColor = vec4(mix(background, col, m), 1);
 }
