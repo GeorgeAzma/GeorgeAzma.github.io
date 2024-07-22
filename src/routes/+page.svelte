@@ -6,6 +6,7 @@
 	import carbonFiber from '$lib/assets/shaders/carbon-fiber.frag?raw';
 	import lavaLamp from '$lib/assets/shaders/lava-lamp.frag?raw';
 	import siri from '$lib/assets/shaders/siri.frag?raw';
+	import chromicClarity from '$lib/assets/shaders/chromic-clarity.frag?raw';
 
 	const email = 'lumi.main.mail@gmail.com';
 	const copyToClipboard = (e: Event & { currentTarget: HTMLElement }) => {
@@ -134,6 +135,7 @@
 		<Shader frag={carbonFiber} />
 		<Shader frag={lavaLamp} />
 		<Shader frag={siri} />
+		<Shader frag={chromicClarity} />
 	</div>
 	<h1 class="main-text">I'm Lumiey, graphics developer and software engineer.</h1>
 
