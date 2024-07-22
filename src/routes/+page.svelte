@@ -1,7 +1,10 @@
 <script lang="ts">
+	import { onMount, onDestroy, tick } from 'svelte';
 	import Navbar from '$lib/Navbar.svelte';
 	import Shader from '$lib/Shader.svelte';
-	import background from '$lib/assets/shaders/background.frag?raw';
+	import glossyGradients from '$lib/assets/shaders/glossy-gradients.frag?raw';
+	import carbonFiber from '$lib/assets/shaders/carbon-fiber.frag?raw';
+	import lavaLamp from '$lib/assets/shaders/lava-lamp.frag?raw';
 
 	const email = 'lumi.main.mail@gmail.com';
 	const copyToClipboard = (e: Event & { currentTarget: HTMLElement }) => {
@@ -13,11 +16,88 @@
 			child.classList.add('hidden');
 		}, 2000);
 	};
+
+	let shadersContainer: any;
+	let scroll = 0;
+	let scrollTimeout: any;
+
+	const detectScrollEnd = async () => {
+		if (scrollTimeout !== null) clearTimeout(scrollTimeout);
+		// Wait for the next DOM update
+		await tick();
+		scrollTimeout = setTimeout(() => {
+			let r = Math.round(scroll / window.innerWidth) * window.innerWidth;
+			scroll =
+				scroll - r > 0 ? r + window.innerWidth : scroll - r < 0 ? r - window.innerWidth : scroll;
+			shadersContainer.scrollTo({ left: scroll, behavior: 'smooth' });
+		}, 400);
+	};
+
+	function scrollLeft() {
+		if (shadersContainer !== null) {
+			scroll = Math.max(0, Math.round(scroll / window.innerWidth) - 1) * window.innerWidth;
+			shadersContainer.scrollTo({ left: scroll, behavior: 'smooth' });
+		}
+	}
+
+	function scrollRight() {
+		if (shadersContainer !== null) {
+			scroll = Math.min(
+				shadersContainer.scrollWidth - window.innerWidth,
+				(Math.round(scroll / window.innerWidth) + 1) * window.innerWidth
+			);
+			shadersContainer.scrollTo({ left: scroll, behavior: 'smooth' });
+		}
+	}
+
+	const handleScroll = () => {
+		scroll = shadersContainer.scrollLeft;
+		detectScrollEnd();
+	};
+
+	const handleKeyPress = (event: KeyboardEvent) => {
+		switch (event.key) {
+			case 'ArrowLeft':
+				scrollLeft();
+				break;
+			case 'ArrowRight':
+				scrollRight();
+				break;
+		}
+	};
+
+	let oldWidth = 0;
+	const handleResize = () => {
+		scroll = Math.round(scroll / oldWidth) * window.innerWidth;
+		if (shadersContainer) shadersContainer.scrollTo({ left: scroll, behavior: 'auto' });
+		oldWidth = window.innerWidth;
+	};
+
+	onMount(() => {
+		if (shadersContainer) shadersContainer.addEventListener('scroll', handleScroll);
+		if (window) {
+			oldWidth = window.innerWidth;
+			window.addEventListener('keyup', handleKeyPress);
+			window.addEventListener('resize', handleResize);
+		}
+	});
+
+	onDestroy(() => {
+		if (shadersContainer) shadersContainer.removeEventListener('scroll', handleScroll);
+		if (typeof window !== 'undefined') {
+			window.removeEventListener('keyup', handleKeyPress);
+			window.removeEventListener('resize', handleResize);
+		}
+	});
 </script>
 
 <div id="gradient" class="glass-pane">
-	<Shader frag={background} />
 	<Navbar />
+	<div bind:this={shadersContainer} id="shaders">
+		<Shader frag={glossyGradients} />
+		<Shader frag={carbonFiber} />
+		<Shader frag={lavaLamp} />
+	</div>
 	<div class="main-text">
 		George Azmaipharashvili, Software engineer mainly specialized at graphics.
 	</div>
@@ -25,10 +105,85 @@
 	<button id="contact-info" on:click={copyToClipboard}
 		>{email}<span class="hidden">(Copied)</span></button
 	>
+	<button class="arrow-left" on:click={scrollLeft}>
+		<svg viewBox="-4.5 0 20 20" stroke="#ffffffcc" stroke-width="0.6" fill="#ffffffaa">
+			<path
+				transform="translate(-331.000000, -6519.000000)"
+				d="M338.61,6539 L340,6537.594 L331.739,6528.987 L332.62,6528.069 L332.615,6528.074 L339.955,6520.427 L338.586,6519 C336.557,6521.113 330.893,6527.014 329,6528.987 C330.406,6530.453 329.035,6529.024 338.61,6539"
+			/>
+		</svg></button
+	>
+	<button class="arrow-right" on:click={scrollRight}
+		><svg viewBox="-4.5 0 20 20" stroke="#ffffffcc" stroke-width="0.6" fill="#ffffffaa">
+			<path
+				transform="scale(-1, 1) translate(-341.000000, -6519.000000)"
+				d="M338.61,6539 L340,6537.594 L331.739,6528.987 L332.62,6528.069 L332.615,6528.074 L339.955,6520.427 L338.586,6519 C336.557,6521.113 330.893,6527.014 329,6528.987 C330.406,6530.453 329.035,6529.024 338.61,6539"
+			/>
+		</svg></button
+	>
 </div>
 
 <style>
+	.arrow-left,
+	.arrow-right {
+		position: absolute;
+		border: none;
+		background: none;
+		top: 50%;
+		transition: 300ms;
+		width: 4rem;
+		padding: 0.5rem;
+		translate: 0% -50%;
+		padding-block: 12rem;
+		border-radius: 1rem;
+		opacity: 0.5;
+	}
+	.arrow-left:hover,
+	.arrow-right:hover {
+		opacity: 1;
+		box-shadow: inset 0px 0px 32px #ddeeff44, inset 0px 0px 4px #ddeeff44;
+	}
+
+	.arrow-left {
+		left: 0.7rem;
+	}
+	.arrow-left:hover {
+		translate: -5% -50%;
+		background: linear-gradient(-0.25turn, #00000000, #ffffff22);
+	}
+	.arrow-left:active {
+		background: #ffffff22;
+		box-shadow: inset 0px 0px 32px #ddeeff44, inset 0px 0px 4px #ddeeff44;
+	}
+
+	.arrow-right {
+		right: 0.7rem;
+	}
+	.arrow-right:hover {
+		translate: 5% -50%;
+		background: linear-gradient(0.25turn, #00000000, #ffffff22);
+	}
+	.arrow-right:active {
+		background: #ffffff22;
+		box-shadow: inset 0px 0px 32px #ddeeff44, inset 0px 0px 4px #ddeeff44;
+	}
+
+	#shaders {
+		display: flex;
+		position: absolute;
+		top: 0;
+		left: 0;
+		margin: 0;
+		padding: 0;
+		width: 100%;
+		height: 100%;
+		overflow-x: scroll;
+		overflow-y: hidden;
+		scrollbar-width: none;
+	}
 	#gradient {
+		display: flex;
+		flex-direction: column;
 		width: 100vw;
 		height: 100vh;
 		margin: 0;
@@ -52,7 +207,7 @@
 		translate: -50% -50%;
 		color: white;
 		inline-size: 80%;
-		font-size: 6vmin;
+		font-size: 5vmin;
 		font-weight: 700;
 		text-align: center;
 		padding-inline: 10%;

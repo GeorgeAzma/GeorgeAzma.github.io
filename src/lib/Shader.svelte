@@ -118,9 +118,7 @@
 
 <style>
 	#background-shader {
-		position: fixed;
-		top: 0;
-		left: 0;
-		z-index: -5;
+		position: relative;
+		z-index: -3;
 	}
 </style>
