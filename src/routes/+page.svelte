@@ -193,12 +193,13 @@
 		translate: 0% -50%;
 		padding-block: 12rem;
 		border-radius: 1rem;
-		opacity: 0.4;
+		opacity: 0.5;
+		filter: drop-shadow(3px 3px 2px #00000077);
 	}
 	.arrow-left:hover,
 	.arrow-right:hover {
-		opacity: 0.8;
-		box-shadow: inset 0px 0px 32px #ddeeff44, inset 0px 0px 4px #ddeeff44;
+		opacity: 0.9;
+		box-shadow: inset 0px 0px 32px #ddeeff55, inset 0px 0px 4px #ddeeff55, 0px 0px 12px #54646b44;
 	}
 
 	.arrow-left {
@@ -210,7 +211,7 @@
 	}
 	.arrow-left:active {
 		background: #ffffff22;
-		box-shadow: inset 0px 0px 32px #ddeeff44, inset 0px 0px 4px #ddeeff44;
+		box-shadow: inset 0px 0px 32px #ddeeff55, inset 0px 0px 4px #ddeeff55;
 	}
 
 	.arrow-right {

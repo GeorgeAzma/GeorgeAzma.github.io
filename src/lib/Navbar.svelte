@@ -70,13 +70,13 @@
 	}
 	#navbar a:hover {
 		padding-inline: 1.4rem;
-		background-color: #dddfff22;
+		background-color: #dddfff33;
 		transition: 200ms;
 		text-shadow: 0px 0px 12px #ddeeff;
 	}
 	#navbar a:active {
 		padding-inline: 1.6rem;
-		background-color: #dddfff30;
+		background-color: #dddfff40;
 		transition: 150ms;
 		box-shadow: inset 0px 0px 12px #ddeeffaa;
 	}
