@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { afterUpdate, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
 	export let frag: string = '';
 	export let vert: string = '';
@@ -121,6 +121,6 @@
 		position: fixed;
 		top: 0;
 		left: 0;
-		z-index: -1;
+		z-index: -5;
 	}
 </style>

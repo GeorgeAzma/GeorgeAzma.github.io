@@ -2,7 +2,6 @@
 	import Navbar from '$lib/Navbar.svelte';
 	import Shader from '$lib/Shader.svelte';
 	import background from '$lib/assets/shaders/background.frag?raw';
-	import { onMount } from 'svelte';
 
 	const email = 'lumi.main.mail@gmail.com';
 	const copyToClipboard = (e: Event & { currentTarget: HTMLElement }) => {
@@ -16,24 +15,35 @@
 	};
 </script>
 
-<Shader frag={background} />
-<Navbar />
-<div class="main-text">
-	George Azmaipharashvili, Software engineer mainly specialized at graphics.
+<div id="gradient" class="glass-pane">
+	<Shader frag={background} />
+	<Navbar />
+	<div class="main-text">
+		George Azmaipharashvili, Software engineer mainly specialized at graphics.
+	</div>
+
+	<button id="contact-info" on:click={copyToClipboard}
+		>{email}<span class="hidden">(Copied)</span></button
+	>
 </div>
 
-<button id="contact-info" on:click={copyToClipboard}
-	>{email}<span class="hidden">(Copied)</span></button
->
-
 <style>
-	@font-face {
-		font-family: 'Roboto Bold';
-		src: url('$lib/assets/fonts/Roboto/Bold.ttf') format('truetype');
+	#gradient {
+		width: 100vw;
+		height: 100vh;
+		margin: 0;
+		padding: 0;
+		left: 0;
+		top: 0;
+		position: absolute;
+		border-radius: 0px;
+		background: linear-gradient(0.5turn, #00000000, #000000aa);
 	}
-	@font-face {
-		font-family: 'Roboto Medium';
-		src: url('$lib/assets/fonts/Roboto/Medium.ttf') format('truetype');
+	.glass-pane {
+		margin: 4px;
+		padding: calc(4px + 1vh);
+		box-shadow: inset 0px 0px 32px #ddeeff66, inset 0px 0px 4px #ddeeff66;
+		border-radius: calc(1vh + 4px);
 	}
 	.main-text {
 		position: absolute;
@@ -46,7 +56,7 @@
 		font-weight: 700;
 		text-align: center;
 		padding-inline: 10%;
-		filter: drop-shadow(0px 0px 4px #334455);
+		filter: drop-shadow(0px 0px 3px #445577);
 		background: linear-gradient(0.25turn, #3f67ff, #eff1ff, #ff99fc);
 		background-clip: text;
 		-webkit-background-clip: text;

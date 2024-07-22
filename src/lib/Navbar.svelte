@@ -43,14 +43,19 @@
 	#navbar {
 		display: flex;
 		text-shadow: -1px 2px 4px black;
+		margin: 4px;
+		padding: calc(4px + 1vh);
+		box-shadow: inset 0px 0px 32px #ddeeff66, inset 0px 0px 4px #ddeeff66;
+		border-radius: calc(1vh + 4px);
 	}
 	#navbar a {
-		font-family: 'Roboto Medium';
+		font-family: 'system-ui', 'Segoe UI';
+		font-weight: 500;
 		display: flex;
 		height: calc(3vh + 8px);
 		font-size: calc(1.5vh + 8px);
 		flex-grow: 1;
-		gap: 8px;
+		gap: 10px;
 		margin-inline: 3px;
 		align-items: center;
 		justify-content: center;
@@ -59,7 +64,7 @@
 		text-decoration: none;
 		padding: calc(4px + 1vh);
 		-webkit-user-drag: none;
-		box-shadow: inset 0px 0px 32px #ddeeff55, inset 0px 0px 4px #ddeeff55;
+		box-shadow: inset 0px 0px 32px #ddeeff66, inset 0px 0px 4px #ddeeff66;
 		border-radius: calc(1vh + 4px);
 	}
 	#navbar a:last-child {
@@ -80,10 +85,11 @@
 	.nav-icon {
 		height: 100%;
 	}
-	@media only screen and (max-width: 500px) {
+	@media only screen and (max-width: 640px) {
 		#navbar a {
 			font-size: 0px;
 			padding-inline: 0px;
+			gap: 0px;
 		}
 	}
 </style>
