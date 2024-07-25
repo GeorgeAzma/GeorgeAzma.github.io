@@ -9,8 +9,8 @@
 	let canvas: HTMLCanvasElement;
 	let program: WebGLProgram | null = null;
 	let gl: WebGL2RenderingContext | null = null;
-	let start = performance.now();
-	let last = performance.now();
+	let start: number;
+	let last: number;
 	let vertexBuffer: WebGLBuffer | null = null;
 
 	// Only compiles/renders if visible or next to visible
@@ -36,6 +36,7 @@
 			return;
 		}
 		start = performance.now();
+		last = start;
 
 		window.addEventListener('resize', resizeCanvas);
 		onShaderChange(vert, frag);
@@ -98,7 +99,7 @@
 					new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
 					gl.STATIC_DRAW
 				);
-			} else gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+			}
 
 			gl.useProgram(program);
 			const positionAttribute = gl.getAttribLocation(program, 'a_position');

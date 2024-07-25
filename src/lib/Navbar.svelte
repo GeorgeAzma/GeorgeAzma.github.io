@@ -81,8 +81,9 @@
 		box-shadow: inset 0px 0px 12px #ddeeffaa;
 	}
 	.nav-icon {
-		width: 38px;
-		height: 38px;
+		width: auto;
+		height: min(38px, 130%);
+		aspect-ratio: 1/1;
 	}
 	@media only screen and (max-width: 640px) {
 		#navbar a {
