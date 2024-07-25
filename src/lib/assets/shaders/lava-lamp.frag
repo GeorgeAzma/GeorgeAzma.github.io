@@ -1,4 +1,4 @@
-precision lowp float;
+precision highp float;
 
 uniform float time;
 uniform vec2 resolution;
@@ -37,17 +37,21 @@ float noise(vec3 p) {
     return o4.y * d.y + o4.x * (1.0 - d.y);
 }
 
-float rand1d(float n) { return fract(sin(n) * 43758.5453123); }
+float hash11(float p) {
+    p = fract(p * 0.1031);
+    p *= p + 33.33;
+    return fract(p * p * 2.0);
+}
 
 float noise1d(float p)  {
 	float fl = floor(p);
 	float fc = fract(p);
-	return mix(rand1d(fl), rand1d(fl + 1.0), fc);
+	return mix(hash11(fl), hash11(fl + 1.0), fc);
 }
 
 float blob(vec2 uv, float n, float i) { 
     float r = noise1d(i + time * 0.1) * 1.2 + 0.4 * max(resolution.x / resolution.y, resolution.y / resolution.x);    
-    float t = fract((time * 0.015 + i * 84.7291) / (1.0 + rand1d(i + ROWS)));
+    float t = fract((time * 0.015 + i * 84.7291) / (1.0 + hash11(i + ROWS)));
     vec2 pos = vec2(i * max(1.0, resolution.x / resolution.y) * 0.8, 
                    (smoothstep(0.0, 0.4, t) * smoothstep(0.8, 0.5, t) * 2.0 - 1.0) * (ROWS - 1.0) * resolution.y / min(resolution.x, resolution.y));
     return length(uv - pos + n) - r;

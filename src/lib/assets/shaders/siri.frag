@@ -1,41 +1,28 @@
-precision lowp float;
+precision highp float;
 
 uniform float time;
 uniform vec2 resolution;
 
 const float TAU = 6.28318530718;
 
-float rand(vec2 n) { 
-	return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
+float hash12(vec2 p) {
+	vec3 p3 = fract(p.xyx * 0.1031);
+    p3 += dot(p3, p3.yzx + 33.33);
+    return fract((p3.x + p3.y) * p3.z);
 }
 
-float noise(vec2 p) {
-	vec2 ip = floor(p);
-	vec2 u = fract(p);
-	u = u*u*(3.0-2.0*u);
-	
+float noise(vec2 p)  {
+	vec2 i = floor(p);
+	vec2 f = fract(p);
+	f *= f * (3.0 - 2.0 * f);
 	float res = mix(
-		mix(rand(ip),rand(ip+vec2(1.0,0.0)),u.x),
-		mix(rand(ip+vec2(0.0,1.0)),rand(ip+vec2(1.0,1.0)),u.x),u.y);
-	return res*res;	
+		mix(hash12(i), hash12(i + vec2(1, 0)), f.x),
+		mix(hash12(i + vec2(0, 1)), hash12(i + vec2(1)), f.x), f.y);
+	return res * res;	
 }
 
 float fbm(vec2 p) {
-	float s = 0.0;
-	float m = 0.0;
-	float a = 0.5;
-	
-	s += a * noise(p);
-	m += a;
-	a *= 0.5;
-	p *= 2.0;
-	
-	s += a * noise(p);
-	m += a;
-	a *= 0.5;
-	p *= 2.0;
-    
-	return s / m;
+	return 0.6 * noise(p) + 0.3 * noise(p * 2.0);
 }
 
 vec3 pal(float t, vec3 a, vec3 b, vec3 c, vec3 d) {

@@ -21,32 +21,35 @@
 
 	let shadersContainer: any;
 	let scroll = 0;
-	let scrollTimeout: any;
+	let scrollTimeout: any = null;
 
 	const detectScrollEnd = async () => {
-		if (scrollTimeout !== null) clearTimeout(scrollTimeout);
+		if (scrollTimeout !== null) {
+			clearTimeout(scrollTimeout);
+			scrollTimeout = null;
+		}
 		// Wait for the next DOM update
 		await tick();
 		scrollTimeout = setTimeout(() => {
-			let r = Math.round(scroll / window.outerWidth) * window.outerWidth;
+			let r = Math.round(scroll / window.innerWidth) * window.innerWidth;
 			scroll =
-				scroll - r > 0 ? r + window.outerWidth : scroll - r < 0 ? r - window.outerWidth : scroll;
+				scroll - r > 0 ? r + window.innerWidth : scroll - r < 0 ? r - window.innerWidth : scroll;
 			shadersContainer.scrollTo({ left: scroll, behavior: 'smooth' });
 		}, 300);
 	};
 
 	function scrollLeft() {
 		if (shadersContainer !== null) {
-			scroll = (Math.round(scroll / window.outerWidth) - 1) * window.outerWidth;
-			if (scroll < 0) scroll = shadersContainer.scrollWidth - window.outerWidth;
+			scroll = (Math.round(scroll / window.innerWidth) - 1) * window.innerWidth;
+			if (scroll < 0) scroll = shadersContainer.scrollWidth - window.innerWidth;
 			shadersContainer.scrollTo({ left: scroll, behavior: 'smooth' });
 		}
 	}
 
 	function scrollRight() {
 		if (shadersContainer !== null) {
-			scroll = (Math.round(scroll / window.outerWidth) + 1) * window.outerWidth;
-			if (scroll > shadersContainer.scrollWidth - window.outerWidth) scroll = 0;
+			scroll = (Math.round(scroll / window.innerWidth) + 1) * window.innerWidth;
+			if (scroll > shadersContainer.scrollWidth - window.innerWidth) scroll = 0;
 			shadersContainer.scrollTo({ left: scroll, behavior: 'smooth' });
 		}
 	}
