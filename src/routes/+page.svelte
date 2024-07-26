@@ -20,42 +20,37 @@
 	};
 
 	let shadersContainer: any;
-	let scroll = 0;
 	let scrollTimeout: any = null;
+	let index = 0;
 
 	const detectScrollEnd = async () => {
 		if (scrollTimeout !== null) {
 			clearTimeout(scrollTimeout);
 			scrollTimeout = null;
 		}
-		// Wait for the next DOM update
-		await tick();
 		scrollTimeout = setTimeout(() => {
-			let r = Math.round(scroll / window.innerWidth) * window.innerWidth;
-			scroll =
-				scroll - r > 0 ? r + window.innerWidth : scroll - r < 0 ? r - window.innerWidth : scroll;
-			shadersContainer.scrollTo({ left: scroll, behavior: 'smooth' });
-		}, 300);
+			index = Math.round(shadersContainer.scrollLeft / window.innerWidth);
+			shadersContainer.scrollTo({ left: index * window.innerWidth, behavior: 'smooth' });
+		}, 500);
 	};
 
 	function scrollLeft() {
 		if (shadersContainer !== null) {
-			scroll = (Math.round(scroll / window.innerWidth) - 1) * window.innerWidth;
-			if (scroll < 0) scroll = shadersContainer.scrollWidth - window.innerWidth;
-			shadersContainer.scrollTo({ left: scroll, behavior: 'smooth' });
+			index -= 1;
+			if (index < 0) index = shadersContainer.scrollWidth / window.innerWidth - 1;
+			shadersContainer.scrollTo({ left: index * window.innerWidth, behavior: 'smooth' });
 		}
 	}
 
 	function scrollRight() {
 		if (shadersContainer !== null) {
-			scroll = (Math.round(scroll / window.innerWidth) + 1) * window.innerWidth;
-			if (scroll > shadersContainer.scrollWidth - window.innerWidth) scroll = 0;
-			shadersContainer.scrollTo({ left: scroll, behavior: 'smooth' });
+			index += 1;
+			if (index > shadersContainer.scrollWidth / window.innerWidth - 1) index = 0;
+			shadersContainer.scrollTo({ left: index * window.innerWidth, behavior: 'smooth' });
 		}
 	}
 
 	const handleScroll = () => {
-		scroll = shadersContainer.scrollLeft;
 		detectScrollEnd();
 	};
 
@@ -78,12 +73,10 @@
 		else scrollRight();
 	};
 
-	// Scroll using mousewheel
-
 	let oldWidth = 0;
 	const handleResize = () => {
-		scroll = Math.round(scroll / oldWidth) * window.innerWidth;
-		if (shadersContainer) shadersContainer.scrollTo({ left: scroll, behavior: 'auto' });
+		let scroll = Math.round(shadersContainer.scrollLeft / oldWidth) * window.innerWidth;
+		if (shadersContainer) shadersContainer.scrollTo({ left: scroll, behavior: 'instant' });
 		oldWidth = window.innerWidth;
 	};
 
@@ -241,6 +234,7 @@
 		overflow-x: scroll;
 		overflow-y: hidden;
 		scrollbar-width: none;
+		touch-action: pan-y;
 	}
 	#gradient {
 		display: flex;

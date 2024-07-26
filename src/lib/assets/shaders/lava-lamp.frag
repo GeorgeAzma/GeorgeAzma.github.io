@@ -92,7 +92,7 @@ void main() {
     }
     vec3 n = getNormal(uv, d, n2);
     float m = smoothstep(0.0, -16.0 / min_res, d);
-    vec3 uvn = normalize(vec3(uv, 3));
+    vec3 uvn = normalize(vec3(gl_FragCoord.xy / resolution.xy * 2.0 - 1.0, 3));
     float spec = max(0.0, uvn.y) * specular(vec3(uvn.x, -3, 0), n);
     spec += min(1.0, 1.0 - uvn.y) * specular(vec3(uvn.x, 3, 0), n);
     spec /= (spec + 3.0) * 0.2;
