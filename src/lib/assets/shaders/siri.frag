@@ -39,25 +39,26 @@ void main() {
     float t = time;
 
     float l = dot(uv, uv);
+    if (l > 1.0) discard;
     fragColor = vec4(0);
 	float r = 4.0 / min_res;
     float sm = smoothstep(1.0 + r, 1.0 - r, l);
-    float sm2 = smoothstep(1.0, 1.0 - r * 2., l);
+    float sm2 = smoothstep(1.0, 1.0 - r * 2.0, l);
     float d = sm * l * l * l * 2.0;
-    vec3 norm = normalize(vec3(uv, 1. - d));
+    vec3 norm = normalize(vec3(uv, 1.0 - d));
     float a = atan(uv.y, uv.x) / TAU + t * 0.1;
-    vec3 col = pal(a, vec3(0.3),vec3(0.5),vec3(1),vec3(0.0,0.8,0.8));
+    vec3 col = pal(a, vec3(0.3), vec3(0.5), vec3(1), vec3(0.0, 0.8, 0.8));
     vec3 cd = abs(col);
     vec3 c = col;
     c += l * max(0.0, l - 0.5 * dot(c, c));
     c += 0.3 * noise(uv * 3.0 / (1. + norm.z * norm.z * norm.z * 2.0));
-    col = c + col * pow((1.0 - sm - pow(max(0.0, length(uv) - 1.0), 0.2)) * 2.0, 4.0);
+    col = c + col * pow(1.0 - sm, 4.0) * 16.0;
     float f = fbm(normalize(uv + 1e-5) * 2. + t) + 0.1;
     uv *= f + 0.1;
     uv *= 0.5;
     l = dot(uv, uv);
     vec3 ins = normalize(cd);
-    float ind = 0.2 + pow(smoothstep(0.0, 1.5, sqrt(l)) * 48.0, 0.25);
+    float ind = 0.2 + sqrt(sqrt(smoothstep(0.0, 1.5, sqrt(l)) * 48.0));
     ind *= ind * ind * ind;
     ind = 1.0 / ind;
     ins *= ind;
@@ -66,5 +67,5 @@ void main() {
 	col -= 0.7 * ins * m;
     col += abs(norm) * (1.0 - d) * 0.5;
 	float alpha = length(col) * d + m + (1. - d) * 0.3;
-    fragColor = vec4(mix(vec3(1, 1, 1), col, alpha * sm2), 1);
+    fragColor = vec4(mix(vec3(1), col, alpha * sm2), 1);
 }
