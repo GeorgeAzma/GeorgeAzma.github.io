@@ -11,7 +11,8 @@
 	let gl: WebGL2RenderingContext | null = null;
 	let start: number;
 	let last: number;
-	let vertexBuffer: WebGLBuffer | null = null;
+	let resolutionLocation: WebGLUniformLocation | null = null;
+	let timeLocation: WebGLUniformLocation | null = null;
 
 	// Only compiles/renders if visible or next to visible
 	function isCanvasVisible() {
@@ -23,8 +24,8 @@
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 		if (gl && program) {
-			const res = gl.getUniformLocation(program, 'resolution');
-			gl.uniform2f(res, canvas.width, canvas.height);
+			gl.useProgram(program);
+			gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
 			gl.viewport(0, 0, canvas.width, canvas.height);
 		}
 	}
@@ -47,8 +48,18 @@
 	});
 
 	function onShaderChange(vert: string, frag: string) {
-		if (!frag) frag = 'precision mediump float;void main() {gl_FragColor=vec4(1);}';
-		if (!vert) vert = 'attribute vec4 a_position;void main() {gl_Position = a_position;}';
+		if (!frag)
+			frag = `#version 300 es 
+      out vec4 fragColor;
+      void main() {
+      fragColor = vec4(1, 0, 1, 1);
+      }`;
+		if (!vert)
+			vert = `#version 300 es 
+      void main() {
+        vec2 vertices[3]=vec2[3](vec2(-1,-1), vec2(3,-1), vec2(-1, 3));
+        gl_Position = vec4(vertices[gl_VertexID],0,1);
+      }`;
 		if (!gl) return;
 
 		if (isCanvasVisible()) {
@@ -60,8 +71,8 @@
 			gl.shaderSource(fs, frag);
 			gl.compileShader(fs);
 			if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
-				const errorLog = gl.getShaderInfoLog(fs);
-				console.error('Fragment shader compilation error:', errorLog);
+				const err = gl.getShaderInfoLog(fs);
+				console.error('Fragment shader compilation error:', err);
 			}
 
 			const vs = gl.createShader(gl.VERTEX_SHADER);
@@ -72,8 +83,8 @@
 			gl.shaderSource(vs, vert);
 			gl.compileShader(vs);
 			if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) {
-				const errorLog = gl.getShaderInfoLog(vs);
-				console.error('Vertex shader compilation error:', errorLog);
+				const err = gl.getShaderInfoLog(vs);
+				console.error('Vertex shader compilation error:', err);
 			}
 
 			if (program) {
@@ -88,23 +99,16 @@
 			gl.attachShader(program, fs);
 			gl.attachShader(program, vs);
 			gl.linkProgram(program);
+			if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+				const err = gl.getProgramInfoLog(program);
+				console.error('Program link error:', err);
+			}
 			gl.deleteShader(fs);
 			gl.deleteShader(vs);
 
-			if (vertexBuffer === null) {
-				vertexBuffer = gl.createBuffer();
-				gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-				gl.bufferData(
-					gl.ARRAY_BUFFER,
-					new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
-					gl.STATIC_DRAW
-				);
-			}
-
 			gl.useProgram(program);
-			const positionAttribute = gl.getAttribLocation(program, 'a_position');
-			gl.enableVertexAttribArray(positionAttribute);
-			gl.vertexAttribPointer(positionAttribute, 2, gl.FLOAT, false, 0, 0);
+			resolutionLocation = gl.getUniformLocation(program, 'resolution');
+			timeLocation = gl.getUniformLocation(program, 'time');
 		}
 
 		resizeCanvas();
@@ -132,8 +136,7 @@
 
 		gl.useProgram(program);
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-		const time = gl.getUniformLocation(program, 'time');
-		if (time) gl.uniform1f(time, (now - start) / 1000);
+		gl.uniform1f(timeLocation, (now - start) / 1000);
 		last = now;
 		requestAnimationFrame(render);
 	}

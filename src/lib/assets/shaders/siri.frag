@@ -1,7 +1,11 @@
+#version 300 es
+
 precision highp float;
 
 uniform float time;
 uniform vec2 resolution;
+
+out vec4 fragColor;
 
 const float TAU = 6.28318530718;
 
@@ -35,7 +39,7 @@ void main() {
     float t = time;
 
     float l = dot(uv, uv);
-    gl_FragColor = vec4(0);
+    fragColor = vec4(0);
 	float r = 4.0 / min_res;
     float sm = smoothstep(1.0 + r, 1.0 - r, l);
     float sm2 = smoothstep(1.0, 1.0 - r * 2., l);
@@ -62,5 +66,5 @@ void main() {
 	col -= 0.7 * ins * m;
     col += abs(norm) * (1.0 - d) * 0.5;
 	float alpha = length(col) * d + m + (1. - d) * 0.3;
-    gl_FragColor = vec4(mix(vec3(1, 1, 1), col, alpha * sm2), 1);
+    fragColor = vec4(mix(vec3(1, 1, 1), col, alpha * sm2), 1);
 }

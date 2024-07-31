@@ -1,7 +1,11 @@
+#version 300 es
+
 precision highp float;
 
 uniform float time;
 uniform vec2 resolution;
+
+out vec4 fragColor;
 
 #define INVERT 1
 
@@ -50,5 +54,5 @@ void main() {
     c = pow(c, vec3(0.52, 0.5, 0.4));
 #endif
 
-    gl_FragColor = vec4(c, 1);
+    fragColor = vec4(c, 1);
 }

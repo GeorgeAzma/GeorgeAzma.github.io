@@ -1,7 +1,11 @@
+#version 300 es
+
 precision highp float;
 
 uniform float time;
 uniform vec2 resolution;
+
+out vec4 fragColor;
 
 float spiral(vec2 uv) {
     vec2 nv = normalize(uv);
@@ -32,5 +36,5 @@ void main() {
     col = (0.5 + col) * (1.5 - abs(cos(length(col) * 3.0)));
     col = mix(vec3(dot(col, vec3(0.299, 0.587, 0.114))), col, 4.0);
 
-    gl_FragColor = vec4(col, 1);
+    fragColor = vec4(col, 1);
 }

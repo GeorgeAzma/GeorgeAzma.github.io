@@ -1,7 +1,11 @@
+#version 300 es
+
 precision highp float;
 
 uniform float time;
 uniform vec2 resolution;
+
+out vec4 fragColor;
 
 const float SMOOTHNESS = 0.5;
 const vec3 BLOB_COL_BASE = vec3(1.0, 0.11, 0.8);
@@ -87,7 +91,7 @@ void main() {
     float d = sdf(uv, n2); 
     vec3 background = BLOB_COL_BASE * 1.0 / (5.0 + d);
     if (d > 0.0) {
-        gl_FragColor = vec4(background, 1);
+        fragColor = vec4(background, 1);
         return;
     }
     vec3 n = getNormal(uv, d, n2);
@@ -99,5 +103,5 @@ void main() {
 
     vec3 col = spec * spec * (BLOB_COL_GLOW * 0.3 + 0.7) + mix(BLOB_COL_BASE, BLOB_COL_GLOW, spec);
     col -= max(0.0, 1.0 - sqrt(sqrt(-d))) * 0.7;
-    gl_FragColor = vec4(mix(background, col, m), 1);
+    fragColor = vec4(mix(background, col, m), 1);
 }
