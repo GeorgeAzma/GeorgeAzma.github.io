@@ -21,8 +21,11 @@
 	}
 
 	function resizeCanvas() {
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
+		const ratio = window.devicePixelRatio || 1;
+		canvas.width = window.innerWidth * ratio;
+		canvas.height = window.innerHeight * ratio;
+		canvas.style.width = `${window.innerWidth}px`;
+		canvas.style.height = `${window.innerHeight}px`;
 		if (gl && program) {
 			gl.useProgram(program);
 			gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
