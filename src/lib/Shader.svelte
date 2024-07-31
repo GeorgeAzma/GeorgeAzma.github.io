@@ -14,8 +14,12 @@
 	let resolutionLocation: WebGLUniformLocation | null = null;
 	let timeLocation: WebGLUniformLocation | null = null;
 
-	// Only compiles/renders if visible or next to visible
 	function isCanvasVisible() {
+		const rect = canvas.getBoundingClientRect();
+		return rect.left > -window.innerWidth && rect.right < window.innerWidth * 2;
+	}
+
+	function isCanvasInProximity() {
 		const rect = canvas.getBoundingClientRect();
 		return rect.left >= -window.innerWidth && rect.right <= window.innerWidth * 2;
 	}
@@ -65,7 +69,7 @@
       }`;
 		if (!gl) return;
 
-		if (isCanvasVisible()) {
+		if (isCanvasInProximity()) {
 			const fs = gl.createShader(gl.FRAGMENT_SHADER);
 			if (!fs) {
 				alert('Could not create fragment shader');

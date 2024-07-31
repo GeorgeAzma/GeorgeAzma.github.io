@@ -15,7 +15,6 @@ float spiral(vec2 uv) {
     float s = sin(a * 4.0);
     float d = distance(nv * (s * 0.2 + 0.5), uv);
     d = cos(d * l);
-    
     return clamp(-exp(-d) + 0.3 / (d * d), 0.0, 1.0);
 }
 
