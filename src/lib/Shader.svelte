@@ -145,6 +145,7 @@
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 		gl.uniform1f(timeLocation, (now - start) / 1000);
 		last = now;
+		if (now - start > 1000 * 60 * 60 * 10) start = now;
 		requestAnimationFrame(render);
 	}
 </script>

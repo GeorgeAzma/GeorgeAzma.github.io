@@ -24,7 +24,7 @@ float fabric(vec2 p) {
 float silk(vec2 uv, float t) {
     float s = sin(5.0 * (uv.x + uv.y + cos(2.0 * uv.x + 5.0 * uv.y)) + sin(12.0 * (uv.x + uv.y)) - t);
     s = 0.7 + 0.3 * (s * s * 0.5 + s);
-    s *= 0.9 + 0.6 * fabric(uv * min(resolution.x, resolution.y) * 0.0006);
+    s *= 0.9 + 0.6 * fabric(uv * min(resolution.x, resolution.y) * 0.0005);
     return s * 0.9 + 0.1;
 }
 

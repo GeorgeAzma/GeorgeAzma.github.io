@@ -1,6 +1,6 @@
 #version 300 es
 
-precision mediump float;
+precision highp float;
 
 uniform float time;
 uniform vec2 resolution;
@@ -50,7 +50,7 @@ void main() {
     vec3 c = pal(a, vec3(0.3), vec3(0.5), vec3(1), vec3(0.0, 0.8, 0.8));
     c += l * max(0.0, l - 0.5 * dot(c, c));
     c += 0.3 * sqrt(noise(uv * 3.0 / (1.0 + norm.z * norm.z * norm.z * 2.0)));
-    float f = fbm(normalize(uv + 1e-5) * 2. + t) + 0.1;
+    float f = fbm(normalize(uv + 1e-5) * 2.0 + t) + 0.1;
     uv *= f + 0.1;
     l = dot(uv, uv);
     vec3 ins = normalize(abs(c));
